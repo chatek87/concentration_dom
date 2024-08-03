@@ -1,0 +1,22 @@
+body {
+    background-color: black;
+    color: antiquewhite;
+}
+
+.container {
+    display: grid;
+}
+
+.card {
+    display: inline-block;
+    border-color: blue;
+    border-width: 2px;
+    border-style: solid;
+    background-color: bisque;
+    color: blueviolet; /*text color*/
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 10px;
+    border-radius: 6px;
+}

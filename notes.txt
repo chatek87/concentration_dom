@@ -1,0 +1,3 @@
+// features:
+score keeping
+difficulty selectable (easy, med, hard -> more cards, less time to preview?)
