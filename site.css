@@ -20,3 +20,23 @@ body {
     margin: 10px;
     border-radius: 6px;
 }
+
+#shuffle-deal {
+    background-color: rgba(128, 255, 0, 0.562);
+    border-radius: 12px;
+}
+#shuffle-deal:hover {
+    background-color: greenyellow;
+}
+#difficulty-selector label {
+    font-size: small;
+}
+label[for="easy"] {
+    color: green
+}
+label[for="med"] {
+    color: yellow;
+}
+label[for="hard"] {
+    color: red;
+}
