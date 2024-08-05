@@ -22,21 +22,26 @@ body {
 }
 
 #shuffle-deal {
-    background-color: rgba(128, 255, 0, 0.562);
+    background-color: rgba(0, 106, 255, 0.659);
     border-radius: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
 }
 #shuffle-deal:hover {
-    background-color: greenyellow;
+    background-color: rgba(3, 108, 255, 0.978);
 }
 #difficulty-selector label {
     font-size: small;
 }
 label[for="easy"] {
-    color: green
+    /* color: green */
+    font-family: Arial, Helvetica, sans-serif;
 }
 label[for="med"] {
-    color: yellow;
+    /* color: yellow; */
+    font-family: Arial, Helvetica, sans-serif;
 }
 label[for="hard"] {
-    color: red;
+    /* color: red; */
+    font-family: Arial, Helvetica, sans-serif;
 }

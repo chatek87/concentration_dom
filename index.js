@@ -11,23 +11,11 @@ class Card {
 class Game {
     constructor() {
         this.difficulty = getDifficulty();
-        this.emojiList = generateEmojiList(this.difficulty);
+        // this.emojiList = []; // for debugging
+        this.emojiList = generateEmojiListByDifficulty(this.difficulty);
     }
 }
-
-function getEmoji() {
-// get emoji for specific card, remove it from the emoji list
-}
-
-function generateEmojiList(difficulty) {
-    if (difficulty) {
-        // dynamically generate an array of emojis based on game params (difficulty)
-
-    } else {
-        console.error("no difficulty provided");
-        return null;
-    }
-}
+// let game;    // not sure whether we'll need to store 'game' in a global variable yet 
 
 function getDifficulty() {
 // get difficulty based on user selection, use this as arg to generateEmojiList()
@@ -35,7 +23,8 @@ function getDifficulty() {
     const selection = difficultySelector.querySelector('input[name="difficulty"]:checked');
 
     if (selection) {
-        return selection.value;
+        console.log(selection.value);
+        return selection.value;        
     } else {
         console.error("no difficulty selected");
         return null;
@@ -43,7 +32,49 @@ function getDifficulty() {
 
 }
 
-// U+1F600 - U+1FAAA
+function getEmoji() {
+    // get emoji for specific card, remove it from the emoji list
+}
 
-// make event handler for 'shuffle-deal' button
-// it starts a new game based on difficulty level
+function generateEmojiListByDifficulty(difficulty) {
+    if (difficulty) {
+        switch (difficulty) {
+            case 'easy':
+                generateEmojiList(6);
+                break;
+            case 'med':
+                generateEmojiList(12);
+                break;
+            case 'hard':
+                generateEmojiList(20);
+                break;
+            default:
+                return console.error(`unhandled value for difficulty: '${difficulty}'`);
+            }
+        } else {
+        return console.error("no difficulty provided");
+    }
+}
+                
+function generateEmojiList(numberOfPairs) {
+    // U+1F600 - U+1FAAA
+    // implement this based on a number supplied by user that specifies number of matched pairs in game
+    // dynamically generate an array of emojis based on game params (difficulty)
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const shuffleDeal = document.getElementById('shuffle-deal');
+    shuffleDeal.addEventListener('click', function() {
+        const game = new Game();
+        console.log(`game.difficulty after game instantiation: ${game.difficulty}`);
+
+        let testEmoji = '🍉';
+        game.emojiList.push(testEmoji);
+        // Append the new div to the flex container
+        // const flexContainer = document.querySelector(".flex-container");
+        // flexContainer.appendChild(seedling.div);
+
+        // attach click event listener to the new div
+        // seedling.div.addEventListener('click', () => seedling.handleClick());
+    });
+});
