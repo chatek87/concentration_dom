@@ -3,7 +3,7 @@ body {
     color: antiquewhite;
 }
 
-.container {
+.gameboard {
     display: grid;
 }
 
@@ -21,13 +21,13 @@ body {
     border-radius: 6px;
 }
 
-#shuffle-deal {
+#start-game {
     background-color: rgba(0, 106, 255, 0.659);
     border-radius: 12px;
     font-family: Arial, Helvetica, sans-serif;
     color: black;
 }
-#shuffle-deal:hover {
+#start-game:hover {
     background-color: rgba(3, 108, 255, 0.978);
 }
 #difficulty-selector label {
