@@ -1,3 +1,24 @@
 // features:
 score keeping
 difficulty selectable (easy, med, hard -> more cards, less time to preview?)
+
+
+// this is an in-progress implementation of randomEmojiFromRange() 
+// the idea is to generate/return an emoji programmatically rather than from a PRE-populated list of emojis
+randomEmojiFromRange() {
+    // hard coded for now, maybe these belong in the global scope or are set dynamically based on difficulty selection?
+    // U+1F600 - U+1FAAA    // unicode range for emojis
+    const min = 0x1F600;
+    const max = 0x1FAAA;
+
+    const minDecimal = parseInt(min, 16);
+    const maxDecimal = parseInt(max, 16);
+
+    const randDecimal = Math.floor(Math.random() * (maxDecimal - minDecimal + 1)) + minDecimal;
+
+    const randHex = randDecimal.toString(16).toUpperCase();
+
+    return String.fromCodePoint(randHex);
+    
+}
+        
