@@ -21,4 +21,11 @@ randomEmojiFromRange() {
     return String.fromCodePoint(randHex);
     
 }
+
+
+long lost twins
+the emojis on the gameboard don't know 
+that they were both spawned
+from the same function block
+👃👃
         
