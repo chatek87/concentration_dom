@@ -5,6 +5,11 @@ body {
 
 .gameboard {
     display: flexbox;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    overflow-y: auto;
 }
 
 .card {
@@ -12,13 +17,14 @@ body {
     border-color: blue;
     border-width: 2px;
     border-style: solid;
-    background-color: bisque;
-    color: blueviolet; /*text color*/
-    padding: 10px;
-    cursor: pointer;
-    font-size: 14px;
-    margin: 10px;
-    border-radius: 6px;
+    background-color: rgb(24, 177, 219); 
+    color: white; /* Text color */
+    padding: 10px 20px; /* Padding for size */
+    cursor: pointer; /* Changes cursor to pointer on hover */
+    text-align: center; /* Center text inside the div */
+    font-size: 16px; /* Font size */
+    margin: 5px; /* Margin around each div */
+    border-radius: 5px; /* Rounded corners */
 }
 
 #start-game {

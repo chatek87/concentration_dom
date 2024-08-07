@@ -7,9 +7,18 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
         constructor(emoji) {
             this.emoji = emoji;
             this.hidden = true;
+            this.selected = false;
             this.matched = false;
+            this.timesClicked = 0;
             this.div = document.createElement("div");
             this.div.innerHTML = this.emoji;
+            this.div.classList.add('card');
+        }
+
+        handleClick() {
+            this.timesClicked += 1;
+            console.log(`${this.emoji} clicked ${this.timesClicked} times`);
+            // do stuff
         }
     }
 
@@ -41,6 +50,18 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
             }
         }
 
+        createCardsFromEmojiList() {  
+            let len = this.emojiList.length;
+            let cards = [];
+
+            for (let i = 0; i < len; i++) {
+                let card = new Card(this.emojiList[i]);
+                cards.push(card);
+            }
+
+            return cards;
+        }
+
         createEmojiList(numberOfPairs) {
             const emojiList = [];
             // POPULATE LIST
@@ -60,18 +81,6 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
             }
         
             return emojiList;
-        }
-
-        createCardsFromEmojiList() {  
-            let len = this.emojiList.length;
-            let cards = [];
-
-            for (let i = 0; i < len; i++) {
-                let card = new Card(this.emojiList[i]);
-                cards.push(card);
-            }
-
-            return cards;
         }
 
         randomEmojiFromRange() {

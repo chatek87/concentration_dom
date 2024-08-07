@@ -2,19 +2,20 @@
 <html>
     <head>
         <title>c o n c e n t r a t i o n</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <script defer src="index.js"></script>
         <link rel="stylesheet" href="site.css">
     </head>
     <body>
-        <form id="difficulty-selector">
+        <div id="difficulty-selector">
             <button id="start-game">start game</button>
-            <input type="radio" id="easy" name="difficulty" value="easy" required>
+            <input type="radio" id="easy" name="difficulty" value="easy">
             <label for="easy">easy</label>
-            <input type="radio" id="med" name="difficulty" value="med" required>
+            <input type="radio" id="med" name="difficulty" value="med">
             <label for="med">med</label>
-            <input type="radio" id="hard" name="difficulty" value="hard" required>
+            <input type="radio" id="hard" name="difficulty" value="hard">
             <label for="hard">hard</label><br>
-        </form>
+        </div>
         <div class="gameboard"></div>
     </body>
 </html>
