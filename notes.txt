@@ -23,9 +23,7 @@ randomEmojiFromRange() {
 }
 
 
-long lost twins
 the emojis on the gameboard don't know 
 that they were both spawned
 from the same function block
-👃👃
-        
+long lost twins 🤠🤠

@@ -105,20 +105,29 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
         }
     }
 
-
     document.addEventListener('DOMContentLoaded', function() {
         const startGame = document.getElementById('start-game');
         startGame.addEventListener('click', function() {
-
-            const difficulty = getDifficulty();
-            const game = new Game(difficulty);
-
-            console.log(`game.difficulty after game instantiation: ${game.difficulty}`);
-
+            // grab gameboard from html
             const gameboard = document.querySelector(".gameboard");
+            // clear gameboard
+            while (gameboard.firstChild) {
+                gameboard.removeChild(gameboard.firstChild);
+            }
+            // grab the difficulty, use it to instantiate new game
+            const difficulty = getDifficulty();
+            const game = new Game(difficulty);            
+            console.log(`game.difficulty after game instantiation: ${game.difficulty}`);
+            // add event listener to each card, append card to gameboard
             game.cards.forEach(card => {
-                gameboard.appendChild(card.div);
                 card.div.addEventListener('click', () => card.handleClick());
+                gameboard.appendChild(card.div);
+            });
+            // reset difficulty selector
+            const difficultySelector = document.getElementById("difficulty-selector");
+            const radios = difficultySelector.querySelectorAll('input[name="difficulty"]');
+            radios.forEach(radio => {
+                radio.checked = false;
             });
         });
     });
