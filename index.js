@@ -13,12 +13,17 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
             this.div = document.createElement("div");
             this.div.innerHTML = this.emoji;
             this.div.classList.add('card');
+
+            this.cover = document.createElement("div");
+            this.cover.classList.add('cover');
+            this.div.appendChild(this.cover);
         }
 
         handleClick() {
             this.timesClicked += 1;
             console.log(`${this.emoji} clicked ${this.timesClicked} times`);
-            // do stuff
+            // toggle cover visibility
+            this.cover.style.display = this.cover.style.display === 'none' ? 'block' : 'none';
         }
     }
 
