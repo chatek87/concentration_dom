@@ -27,3 +27,35 @@ the emojis on the gameboard don't know
 that they were both spawned
 from the same function block
 long lost twins 🤠🤠
+
+
+// 
+cardClicked(card) {
+        if (!this.firstGuessMade) {
+            // first guess
+            this.firstGuess = card;
+            card.show();
+            this.firstGuessMade = true;
+        } else {
+            // second guess
+            this.secondGuess = card;
+            card.show();
+
+            // compare guesses
+            if (this.firstGuess.emoji === this.secondGuess.emoji) {
+                this.firstGuess.matched = true;
+                this.secondGuess.matched = true;
+                console.log("successful match!");
+            } else {
+                setTimeout(() => {
+                    this.firstGuess.hide();
+                    this.secondGuess.hide();
+                }, 1000); // hide cards after 1 second if not matched
+            }
+
+            // reset for next turn
+            this.firstGuess = null;
+            this.secondGuess = null;
+            this.firstGuessMade = false;
+        }
+    }

@@ -3,75 +3,20 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
 (function() {
     'use strict';
 
-    class Card {
-        constructor(emoji, game) {
-            this.emoji = emoji;
-            this.selected = false;
-            this.matched = false;
-            this.timesClicked = 0;
-            this.div = document.createElement("div");
-            this.div.innerHTML = this.emoji;
-            this.div.classList.add('card');
-
-            this.cover = document.createElement("div");
-            this.cover.classList.add('cover');
-            this.div.appendChild(this.cover);
-
-            this.game = game;
-        }
-
-        handleClick() {
-            if (this.game.firstGuessMade == false) {
-                this.game.firstGuess = this;
-                this.timesClicked += 1;
-                this.show();
-                console.log(`${this.emoji} clicked ${this.timesClicked} times`);
-                this.game.firstGuessMade = true;
-            } else {
-                this.game.secondGuess = this;
-                this.timesClicked += 1;
-                this.show();
-                console.log(`${this.emoji} clicked ${this.timesClicked} times`);
-                this.game.compareGuesses();
-            }
-        }
-
-        show() {
-            this.cover.style.display = 'none';            
-        }
-
-        hide() {
-            this.cover.style.display = 'block';
-        }
-    }
-
     class Game {
         constructor(difficulty) {
             this.difficulty = difficulty;
             this.initialize();
         }
-        
+
+        // GAME SETUP STUFF...
         initialize() {
             this.emojiList = this.getEmojiListByDifficulty(this.difficulty);
             this.cards = this.createCardsFromEmojiList();
             this.firstGuessMade = false;
-            this.firstGuess = '';
-            this.secondGuess = '';
-        }
-
-        compareGuesses() {
-            if (this.firstGuess.emoji === this.secondGuess.emoji)
-            {
-                console.log("successful match!");
-            }
-
-        }
-        coverUnmatchedCards() {
-            this.cards.forEach(card => {
-                if (!card.matched) {
-                    card.hide();
-                }
-            })
+            
+            this.firstGuess = null;
+            this.secondGuess = null;
         }
 
         getEmojiListByDifficulty(difficulty) {
@@ -96,7 +41,7 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
             let cards = [];
 
             for (let i = 0; i < len; i++) {
-                let card = new Card(this.emojiList[i], this);
+                let card = new Card(this.emojiList[i], i);
                 cards.push(card);
             }
 
@@ -105,7 +50,7 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
 
         createEmojiList(numberOfPairs) {
             const emojiList = [];
-            // POPULATE LIST
+            // populate list
             for (let i = 0; i < numberOfPairs; i++) {
                 let emoji;
                 do {
@@ -115,7 +60,7 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
                 emojiList.push(emoji);
                 emojiList.push(emoji);
             }
-            // SHUFFLE LIST
+            // shuffle list
             for (let i = emojiList.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [emojiList[i], emojiList[j]] = [emojiList[j], emojiList[i]];
@@ -130,6 +75,83 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
             return emojis[randomIndex];
         }
 
+        // GAMEPLAY STUFF ...
+        compareGuesses() {
+            if (this.firstGuess.emoji === this.secondGuess.emoji)
+            {
+                console.log("successful match!");
+                return true;
+            } else {
+                return false;
+            }            
+
+        }
+
+        coverUnmatchedCards() {
+            this.cards.forEach(card => {
+                if (card.matched == false) {
+                    card.hide();
+                }
+            })
+        }
+
+        cardClicked(card) {
+            if (!this.firstGuessMade) {
+                // first guess
+                this.firstGuess = card;
+                card.timesClicked += 1;
+                card.show();
+                console.log(`${card.emoji} clicked ${card.timesClicked} times`);
+                this.firstGuessMade = true;
+            } else {
+                // second guess
+                this.secondGuess = card;
+                card.timesClicked += 1;
+                card.show();
+                console.log(`${card.emoji} clicked ${card.timesClicked} times`);
+                
+                // replace with a call to compareGuesses() for readability
+                if (this.firstGuess.emoji === this.secondGuess.emoji) {
+                    this.game.cards[this.game.firstGuess.index].matched = true;
+                    this.game.cards[this.game.secondGuess.index].matched = true;
+                }
+
+                // finally, replace with a call to resetForNextTurn();
+            } 
+        }
+
+    }
+
+    class Card {
+        constructor(emoji, index, game) {
+            this.emoji = emoji;
+            // this.selected = false;
+            this.matched = false;
+            this.timesClicked = 0;
+            this.div = document.createElement("div");
+            this.div.innerHTML = this.emoji;
+            this.div.classList.add('card');
+            this.div.setAttribute('data-index', index)
+            this.div.addEventListener('click', this.handleClick.bind(this));
+
+            this.cover = document.createElement("div");
+            this.cover.classList.add('cover');
+            this.div.appendChild(this.cover);
+
+            this.game = game;   // reference to the game instance
+        }
+
+        show() {
+            this.cover.style.display = 'none';     
+        }
+
+        hide() {
+            this.cover.style.display = 'block';
+        }
+
+        handleClick() {
+            this.game.cardClicked(this);
+        }
     }
 
     function getDifficulty() {
@@ -160,7 +182,6 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
             console.log(`game started. difficulty: ${game.difficulty}`);
             // add event listener to each card, append card to gameboard
             game.cards.forEach(card => {
-                card.div.addEventListener('click', () => card.handleClick());
                 gameboard.appendChild(card.div);
             });
             // reset difficulty selector
