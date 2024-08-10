@@ -13,8 +13,11 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
         initialize() {
             this.emojiList = this.getEmojiListByDifficulty(this.difficulty);
             this.cards = this.createCardsFromEmojiList();
+            // tracks whether first or second guess
             this.firstGuessMade = false;
-            
+            // tracks whether we are in 'guessing' mode (serves as a gate for whether handleClick() does anything or not)
+            this.guessingInProgress = true;
+            // holds card guesses for comparison
             this.firstGuess = null;
             this.secondGuess = null;
         }
@@ -41,7 +44,7 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
             let cards = [];
 
             for (let i = 0; i < len; i++) {
-                let card = new Card(this.emojiList[i], i);
+                let card = new Card(this.emojiList[i], i, this);
                 cards.push(card);
             }
 
@@ -76,6 +79,48 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
         }
 
         // GAMEPLAY STUFF ...
+        cardClicked(card) {
+            if (!this.firstGuessMade) {
+                // first guess
+                this.firstGuess = card;
+                card.show();
+                this.firstGuessMade = true;
+            } else {
+                // second guess
+                this.secondGuess = card;
+                card.show();
+    
+                // compare guesses
+                if (this.firstGuess.emoji === this.secondGuess.emoji) {
+                    this.firstGuess.matched = true;
+                    this.secondGuess.matched = true;
+                    console.log("successful match!");
+                } else {
+                    // we have to change setTimeout to async/await promise bc we want to pause execution here for a sec
+                    setTimeout(() => {
+                        this.firstGuess.hide();
+                        this.secondGuess.hide();
+                    }, 1000); // hide cards after 1 second if not matched
+                }
+    
+                // reset for next turn
+                this.firstGuess = null;
+                this.secondGuess = null;
+                this.firstGuessMade = false;
+            }
+        }
+
+        showAndRecordGuess(card) {            
+            card.show();
+            card.timesClicked += 1;
+            console.log(`${card.emoji} clicked ${card.timesClicked} times`);
+            // if first guess hasn't been made
+            if (!this.firstGuessMade) {
+                this.firstGuess = card;
+            }
+
+        }
+
         compareGuesses() {
             if (this.firstGuess.emoji === this.secondGuess.emoji)
             {
@@ -94,32 +139,6 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
                 }
             })
         }
-
-        cardClicked(card) {
-            if (!this.firstGuessMade) {
-                // first guess
-                this.firstGuess = card;
-                card.timesClicked += 1;
-                card.show();
-                console.log(`${card.emoji} clicked ${card.timesClicked} times`);
-                this.firstGuessMade = true;
-            } else {
-                // second guess
-                this.secondGuess = card;
-                card.timesClicked += 1;
-                card.show();
-                console.log(`${card.emoji} clicked ${card.timesClicked} times`);
-                
-                // replace with a call to compareGuesses() for readability
-                if (this.firstGuess.emoji === this.secondGuess.emoji) {
-                    this.game.cards[this.game.firstGuess.index].matched = true;
-                    this.game.cards[this.game.secondGuess.index].matched = true;
-                }
-
-                // finally, replace with a call to resetForNextTurn();
-            } 
-        }
-
     }
 
     class Card {
