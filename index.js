@@ -20,6 +20,12 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
             // holds card guesses for comparison
             this.firstGuess = null;
             this.secondGuess = null;
+            this.numberOfGuessesMade = 0;
+        }
+
+        updateGuessesCounter() {
+            const guessesCounter = document.getElementById('guesses-counter');
+            guessesCounter.textContent = `Guesses Made: ${this.numberOfGuessesMade}`;
         }
 
         getEmojiListByDifficulty(difficulty) {
@@ -79,45 +85,56 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
         }
 
         // GAMEPLAY STUFF ...
-        cardClicked(card) {
-            if (!this.firstGuessMade) {
-                // first guess
-                this.firstGuess = card;
-                card.show();
-                this.firstGuessMade = true;
-            } else {                
-                // second guess
-                // don't do stuff if card is shown
-                if (card.cover.style.display === 'block') {
-                    this.secondGuess = card;
+        async cardClicked(card) {
+            if (this.guessingInProgress) {
+                this.numberOfGuessesMade += 1;
+                this.updateGuessesCounter();
+                if (!this.firstGuessMade) {
+                    // check if card is already matched/uncovered?
+                    // first guess
+                    this.firstGuess = card;
                     card.show();
-        
-                    // compare guesses
-                    if (this.firstGuess.emoji === this.secondGuess.emoji) {
-                        this.firstGuess.matched = true;
-                        this.secondGuess.matched = true;
-                        console.log("successful match!");
-                    } else {
-                        // we have to change setTimeout to async/await promise bc we want to pause execution here for a sec
+                    this.firstGuessMade = true;
+                } else {                
+                    // second guess
+                    // don't do stuff if card is shown
+                    if (card.cover.style.display === 'block') {
+                        this.secondGuess = card;
+                        card.show();
+
+                        this.guessingInProgress = false;
+            
+                        // compare guesses
+                        if (this.firstGuess.emoji === this.secondGuess.emoji) {
+                            this.firstGuess.matched = true;
+                            this.secondGuess.matched = true;
+                            console.log("successful match!");
+                        } else {
+                            await delay(1000);
                             this.firstGuess.hide();
                             this.secondGuess.hide();
+                        }
+            
+                        // reset for next turn
+                        this.firstGuess = null;
+                        this.secondGuess = null;
+                        this.firstGuessMade = false;
+                        this.guessingInProgress = true;
+                    } else {
+                        console.log("already selected")
                     }
-        
-                    // reset for next turn
-                    this.firstGuess = null;
-                    this.secondGuess = null;
-                    this.firstGuessMade = false;
-                } else {
-                    console.log("already selected")
                 }
             }
         }
 
-        coverUnmatchedCards() {
+        async showAllCardsBriefly(ms) {
             this.cards.forEach(card => {
-                if (card.matched == false) {
-                    card.hide();
-                }
+                card.show();
+            });
+            // how can i incorporate delay here of ms time
+            await delay(ms);
+            this.cards.forEach(card => {
+                card.hide();
             })
         }
     }
@@ -174,7 +191,7 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
 
     document.addEventListener('DOMContentLoaded', function() {
         const startGame = document.getElementById('start-game');
-        startGame.addEventListener('click', function() {
+        startGame.addEventListener('click', async function() {
             // grab gameboard from html
             const gameboard = document.querySelector(".gameboard");
             // clear gameboard
@@ -183,7 +200,8 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
             }
             // grab the difficulty, use it to instantiate new game
             const difficulty = getDifficulty();
-            const game = new Game(difficulty);            
+            const game = new Game(difficulty);     
+            game.updateGuessesCounter();
             console.log(`game started. difficulty: ${game.difficulty}`);
             // add event listener to each card, append card to gameboard
             game.cards.forEach(card => {
@@ -195,6 +213,8 @@ const emojis = ['💘','💝','💖','💗','💓','💞','💕','💟','❣️'
             radios.forEach(radio => {
                 radio.checked = false;
             });
+
+            await game.showAllCardsBriefly(2000);
         });
     });
 })();

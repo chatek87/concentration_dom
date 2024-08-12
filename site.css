@@ -19,13 +19,16 @@ body {
     border-width: 2px;
     border-style: solid;
     background-color: rgb(24, 177, 219); 
-    color: antiquewhite; /* Text color */
-    padding: 10px 20px; /* Padding for size */
-    cursor: pointer; /* Changes cursor to pointer on hover */
-    text-align: center; /* Center text inside the div */
-    font-size: 16px; /* Font size */
-    margin: 5px; /* Margin around each div */
-    border-radius: 5px; /* Rounded corners */
+    color: antiquewhite; 
+    padding: 10px 20px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px; 
+    margin: 5px; 
+    border-radius: 5px;
+    /* width: 150px; Fixed width */
+    /* height: 200px; Fixed height */
+    box-sizing: border-box; 
 }
 .cover {
     position: absolute;
@@ -61,4 +64,12 @@ label[for="med"] {
 label[for="hard"] {
     /* color: red; */
     font-family: Arial, Helvetica, sans-serif;
+}
+
+#guesses-counter {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    color: antiquewhite;
+    margin: 10px 0;
+    text-align: center;
 }
