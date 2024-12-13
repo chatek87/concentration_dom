@@ -3,7 +3,7 @@ import { emojis } from "./emojis.js";
 // difficulty levels
 const easy = 6;
 const med = 12;
-const hard = 24;
+const hard = 18;
 
 (function () {
   "use strict";
