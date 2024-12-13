@@ -30,7 +30,7 @@ const hard = 18;
 
     updateGuessesCounter() {
       const guessesCounter = document.getElementById("guesses-counter");
-      guessesCounter.textContent = `Guesses Made: ${this.numberOfGuessesMade}`;
+      guessesCounter.textContent = `guesses: ${this.numberOfGuessesMade}`;
     }
 
     getEmojiListByDifficulty(difficulty) {
@@ -91,8 +91,19 @@ const hard = 18;
       return emojis[randomIndex];
     }
 
+    checkIfAllCardsMatched() {
+      return this.cards.every(card => card.matched);
+    }
+
     // GAMEPLAY STUFF ...
     async cardClicked(card) {
+      if (this.checkIfAllCardsMatched()) {
+        // alert('Great Job! Enter Your Name:');
+        const name = prompt('Great Job!!! Enter your name:');
+        console.log(`Congratulations, ${name}!!!`);
+        updateLeaderboard(name, this.numberOfGuessesMade, this.difficulty);
+        return;
+      }
       if (this.guessingInProgress) {
         if (!card.matched && card !== this.firstGuess) {
           if (!this.firstGuessMade) {
@@ -109,6 +120,7 @@ const hard = 18;
               card.show();
 
               this.guessingInProgress = false;
+
 
               // compare guesses
               if (this.firstGuess.emoji === this.secondGuess.emoji) {
